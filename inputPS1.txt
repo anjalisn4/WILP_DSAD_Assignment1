@@ -11,6 +11,14 @@ isOpen:0
 isOpen:1
 isOpen:2
 addPerson:6
+addPerson:7
+addPerson:8
+addPerson:9
+addPerson:10
+addPerson:11
+addPerson:12
+addPerson:13
+
 getWindow:0
 getWindow:1
 getWindow:2
@@ -19,4 +27,6 @@ giveTicket:
 giveTicket:
 getWindow:0
 getWindow:1
+getWindow:2
+addPerson:14
 getWindow:2

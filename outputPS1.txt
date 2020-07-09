@@ -9,34 +9,51 @@ addPerson:4
 addPerson:5
  >> 0
 getWindow:0
- >> []
+ >> [1, 2, 3, 4, 5]
 getWindow:1
- >> [0, 1, 2, 3, 4]
+ >> []
 getWindow:2
  >> []
 isOpen:0
- >> False
-isOpen:1
  >> True
+isOpen:1
+ >> False
 isOpen:2
  >> False
 addPerson:6
  >> 1
-getWindow:0
- >> []
-getWindow:1
- >> [0, 1, 2, 3, 4]
-getWindow:2
- >> [5]
-giveTicket:
+addPerson:7
+ >> 1
+addPerson:8
+ >> 1
+addPerson:9
+ >> 1
+addPerson:10
+ >> 1
+addPerson:11
  >> 2
-giveTicket:
- >> 1
-giveTicket:
- >> 1
+addPerson:12
+ >> 2
+addPerson:13
+ >> 2
 getWindow:0
- >> []
+ >> [1, 2, 3, 4, 5]
 getWindow:1
- >> [3, 4]
+ >> [6, 7, 8, 9, 10]
+getWindow:2
+ >> [11, 12, 13]
+giveTicket:
+ >> 3
+giveTicket:
+ >> 3
+giveTicket:
+ >> 3
+getWindow:0
+ >> [4, 5]
+getWindow:1
+ >> [9, 10]
 getWindow:2
  >> []
+addPerson:14
+ >> 2
+getWindow:2 >> [14]

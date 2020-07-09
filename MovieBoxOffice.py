@@ -62,7 +62,7 @@ class BoxOffice:
                 count = sum(1 for i in self.queues[j] if i != None)
                 smallestQueueIndex = j
         return smallestQueueIndex  
-             
+
     # This function adds a person to the smallest queue available.
     def addPerson(self, personid):
         small = self.smallestOpenQueue()
@@ -100,7 +100,7 @@ if __name__ == '__main__':
             itype , id = i.split(':')
             addperson = boxoffice.addPerson(int(id))
             if(addperson == -1):
-                output.write("all queues are full")
+                output.write("all queues are full\n")
             else:    
                 output.write(STRING_CONCAT % (i, addperson))
         if 'giveTicket' in i:
