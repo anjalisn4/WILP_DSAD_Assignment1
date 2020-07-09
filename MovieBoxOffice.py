@@ -23,15 +23,18 @@ class BoxOffice:
         self.ends = [0 for i in range(w)]
         self.open= [False for i in range(w)]
         self.open[0] = True
+
     # This function returns if a window is open by its id
     def isOpen(self,windowid):
         return self.open[windowid]
+
     #This function gets a window by its id
     def getWindow(self, windowid):
         if self.isOpen(windowid):
             return [x for x in self.queues[windowid] if x is not None] 
         else:
             return []
+
     # This function issues a single ticket across all open windows where atleast one person is present
     def giveTicket(self):
         ticketgiven=0
@@ -43,11 +46,13 @@ class BoxOffice:
                     self.queues[j].append(None)
                     ticketgiven+=1   
         return ticketgiven
+
     # This is a recurring function which adds a person to the given queue index
     def recurr(self,index,personid):
         self.queues[index].pop(0)
         self.queues[index].append(personid)
         return index
+
     # This function gives the smallest Queue available in the given list 
     def smallestOpenQueue (self):
         count = sum(1 for i in self.queues[0] if i != None)
@@ -56,7 +61,8 @@ class BoxOffice:
             if (sum(1 for i in self.queues[j] if i != None) < count and self.open[j]):  
                 count = sum(1 for i in self.queues[j] if i != None)
                 smallestQueueIndex = j
-        return smallestQueueIndex       
+        return smallestQueueIndex  
+             
     # This function adds a person to the smallest queue available.
     def addPerson(self, personid):
         small = self.smallestOpenQueue()

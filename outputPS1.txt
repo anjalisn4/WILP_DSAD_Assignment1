@@ -9,25 +9,25 @@ addPerson:4
 addPerson:5
  >> 0
 getWindow:0
- >> [1, 2, 3, 4, 5]
-getWindow:1
  >> []
+getWindow:1
+ >> [0, 1, 2, 3, 4]
 getWindow:2
  >> []
 isOpen:0
- >> True
-isOpen:1
  >> False
+isOpen:1
+ >> True
 isOpen:2
  >> False
 addPerson:6
  >> 1
 getWindow:0
- >> [1, 2, 3, 4, 5]
-getWindow:1
- >> [6]
-getWindow:2
  >> []
+getWindow:1
+ >> [0, 1, 2, 3, 4]
+getWindow:2
+ >> [5]
 giveTicket:
  >> 2
 giveTicket:
@@ -35,8 +35,8 @@ giveTicket:
 giveTicket:
  >> 1
 getWindow:0
- >> [4, 5]
-getWindow:1
  >> []
+getWindow:1
+ >> [3, 4]
 getWindow:2
  >> []
