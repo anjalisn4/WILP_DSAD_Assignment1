@@ -14,6 +14,7 @@ w: Number of box offices --> 3
 n : max length of each queue --> 5
 """
 class BoxOffice:
+    # Initializion function
     def __init__(self, w, n):
         self.n = n
         self.w = w
@@ -22,16 +23,16 @@ class BoxOffice:
         self.ends = [0 for i in range(w)]
         self.open= [False for i in range(w)]
         self.open[0] = True
-
+    # This function returns if a window is open by its id
     def isOpen(self,windowid):
         return self.open[windowid]
-    
+    #This function gets a window by its id
     def getWindow(self, windowid):
         if self.isOpen(windowid):
             return [x for x in self.queues[windowid] if x is not None] 
         else:
             return []
-
+    # This function issues a single ticket across all open windows where atleast one person is present
     def giveTicket(self):
         ticketgiven=0
         for j in range(len(self.open)): 
@@ -42,12 +43,12 @@ class BoxOffice:
                     self.queues[j].append(None)
                     ticketgiven+=1   
         return ticketgiven
-    
+    # This is a recurring function which adds a person to the given queue index
     def recurr(self,index,personid):
         self.queues[index].pop(0)
         self.queues[index].append(personid)
         return index
-
+    # This function gives the smallest Queue available in the given list 
     def smallestOpenQueue (self):
         count = sum(1 for i in self.queues[0] if i != None)
         smallestQueueIndex=0 
@@ -56,7 +57,7 @@ class BoxOffice:
                 count = sum(1 for i in self.queues[j] if i != None)
                 smallestQueueIndex = j
         return smallestQueueIndex       
-
+    # This function adds a person to the smallest queue available.
     def addPerson(self, personid):
         small = self.smallestOpenQueue()
         if (sum(1 for i in self.queues[small] if i != None)!=n):
@@ -92,7 +93,10 @@ if __name__ == '__main__':
         if 'addPerson' in i:
             itype , id = i.split(':')
             addperson = boxoffice.addPerson(int(id))
-            output.write(STRING_CONCAT % (i, addperson))
+            if(addperson == -1):
+                output.write("all queues are full")
+            else:    
+                output.write(STRING_CONCAT % (i, addperson))
         if 'giveTicket' in i:
             tickets = boxoffice.giveTicket()
             output.write(STRING_CONCAT % (i, tickets))
