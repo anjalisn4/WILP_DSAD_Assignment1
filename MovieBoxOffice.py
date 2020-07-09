@@ -13,7 +13,7 @@ Created on Tue Dec 10 16:06:31 2019
 w: Number of box offices --> 3
 n : max length of each queue --> 5
 """
-class MovieBoxOffice:
+class BoxOffice:
     def __init__(self, w, n):
         self.n = n
         self.w = w
@@ -24,68 +24,76 @@ class MovieBoxOffice:
         self.open[0] = True
 
     def isOpen(self,windowid):
-        if i is self.open[windowid]:
-            return True
-        return False
+        return self.open[windowid]
     
     def getWindow(self, windowid):
-        queue = self.queues[windowid]
-        if len(queue)>0:
-            return queue
+        if self.isOpen(windowid):
+            return [x for x in self.queues[windowid] if x is not None] 
         else:
-            return queue
-
-    def addPerson(self, personid):
-        for open in self.open:
-            if open:
-                index = self.open.index(open)
-                queue = self.queues[index]
-                if None not in queue and len(queue) == self.n:
-                    return "all queues are full"
-                if None in queue:
-                    insert_index = queue.index(None)
-                    self.queues[index][insert_index] = personid
-                    return index
+            return []
 
     def giveTicket(self):
         ticketgiven=0
-        for open in self.open:
-            if open:
-                index_open = self.open.index(open)
-                queue = self.queues[index_open]
-                for i in queue:
-                    if i is not None:
-                        adding_index = queue.index(i)
-                        self.queues[index_open][adding_index]= None
-                        ticketgiven += 1
+        for j in range(len(self.open)): 
+            if(self.open[j]):
+                queueWithNoNone = [x for x in self.queues[j] if x is not None]
+                if (len(queueWithNoNone)!=0):
+                    self.queues[j].remove(queueWithNoNone[0])
+                    self.queues[j].append(None)
+                    ticketgiven+=1   
         return ticketgiven
-                
+    
+    def recurr(self,index,personid):
+        self.queues[index].pop(0)
+        self.queues[index].append(personid)
+        return index
+
+    def smallestOpenQueue (self):
+        count = sum(1 for i in self.queues[0] if i != None)
+        smallestQueueIndex=0 
+        for j in range(len(self.open)): 
+            if (sum(1 for i in self.queues[j] if i != None) < count and self.open[j]):  
+                count = sum(1 for i in self.queues[j] if i != None)
+                smallestQueueIndex = j
+        return smallestQueueIndex       
+
+    def addPerson(self, personid):
+        small = self.smallestOpenQueue()
+        if (sum(1 for i in self.queues[small] if i != None)!=n):
+            return self.recurr(small,personid)
+        else:
+            try:
+                index_pos = self.open.index(False)
+                self.open[index_pos] = True
+                return self.recurr(index_pos,personid) 
+            except ValueError:
+                print("all queues are full")
+                return -1             
 
 if __name__ == '__main__':
     boxoffice = None
     inputs = open('inputPS1.txt','r')
     output = open('outputPS1.txt', 'w')
+    STRING_CONCAT = "%s >> %s\n"
     for i in inputs:
         if "ticketSystem" in i:
             itype, w, n = i.split(':')
             w = int(w)
             n = int(n)
-            boxoffice = MovieBoxOffice(w,n)
-        if 'isOpen:1' in i:
+            boxoffice = BoxOffice(w,n)
+        if 'isOpen' in i:
             itype , id = i.split(':')
-            if boxoffice.isOpen(int(id)):
-                output.write("isOpen:1 >> True\n")
-            else:
-                output.write("isOpen:1 >> False\n")
+            isBoxOfficeOpen = boxoffice.isOpen(int(id))
+            output.write(STRING_CONCAT % (i, isBoxOfficeOpen))
         if 'getWindow' in i:
             itype , id = i.split(':')
             waiting_list = boxoffice.getWindow(int(id))
-            output.write("getWindow:1 >> "+str(waiting_list)+"\n")
-        if 'addPerson:' in i:
+            output.write(STRING_CONCAT % (i, waiting_list))
+        if 'addPerson' in i:
             itype , id = i.split(':')
             addperson = boxoffice.addPerson(int(id))
-            output.write("addPerson:"+str(id)+">>"+str(addperson)+"\n")
-        if 'giveTicket:' in i:
+            output.write(STRING_CONCAT % (i, addperson))
+        if 'giveTicket' in i:
             tickets = boxoffice.giveTicket()
-            output.write("giveTicket: >>"+str(tickets)+"\n")
+            output.write(STRING_CONCAT % (i, tickets))
     print('Completed')
