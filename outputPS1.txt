@@ -12,12 +12,18 @@ getWindow:0
  >> [1, 2, 3, 4, 5]
 getWindow:1
  >> []
+getWindow:2
+ >> []
+isOpen:0
+ >> True
 isOpen:1
  >> False
 isOpen:2
  >> False
 addPerson:6
  >> 1
+getWindow:0
+ >> [1, 2, 3, 4, 5]
 getWindow:1
  >> [6]
 getWindow:2
@@ -31,4 +37,6 @@ giveTicket:
 getWindow:0
  >> [4, 5]
 getWindow:1
+ >> []
+getWindow:2
  >> []
