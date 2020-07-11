@@ -1,0 +1,41 @@
+addPerson:1
+ >> w0
+addPerson:2
+ >> w0
+addPerson:3
+ >> w0
+addPerson:4
+ >> w0
+addPerson:5
+ >> w0
+getWindow:0
+ >> [1, 2, 3, 4, 5]
+getWindow:1
+ >> []
+getWindow:2
+ >> []
+isOpen:0
+ >> True
+isOpen:1
+ >> False
+isOpen:2
+ >> False
+addPerson:6
+ >> w1
+getWindow:0
+ >> [1, 2, 3, 4, 5]
+getWindow:1
+ >> [6]
+getWindow:2
+ >> []
+giveTicket:
+ >> 2
+giveTicket:
+ >> 1
+giveTicket:
+ >> 1
+getWindow:0
+ >> [4, 5]
+getWindow:1
+ >> []
+getWindow:2 >> []
