@@ -11,3 +11,18 @@ A movie theatre manager needs your help to implement a ticketing system for the 
    - If the queues of all open windows are full and a new window can be opened, then the new person is prompted to join the new queue for the new box office window.
    - If all queues for all windows are full, a corresponding message is displayed. That person need not be considered in the next iteration.
  - After a queue is prompted to a person, the person or system cannot change the queue.
+
+ ## How to run the program?
+ Open terminal in the root folder and run the below code
+ ```
+ py ./MovieBoxOffice.py
+ ```
+The results for the given inputPS1.txt will be available in outputPS1.txt file.
+
+## Files in this repository
+
+-  inputPS1.txt file used for testing
+-  promptsPS1.txt file used for testing
+-  outputPS1.txt file generated while testing
+-  analysisPS1.txt file with answers on the running times (ask number 2)
+ 

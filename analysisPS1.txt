@@ -1,1 +1,20 @@
+NLOC Denotes number of lines of code.NLOC tell us the size of function.
+Complexity column denotes the complexity of each function code.
 
+Function Name	        NLOC	Complexity	Token #	
+------------------------------------------------------------
+__init__	            9	    7	        108	
+isOpen	                2	    1	        14	
+getWindow	            8	    5	        78	
+size	                2	    1	        14	
+getSmallestQueueIndex	6	    3	        46	
+recurr	                12	    3	        84	
+enQueue	                7	    2	        70	
+deQueue	                7	    2	        82	
+addPerson	            9	    2	        64	
+giveTicket	            7	    4	        46	
+
+Generally, the time complexity of Circular Queue is :
+enQueue: O(1)
+deQueue: O(1)
+Size: O(1)

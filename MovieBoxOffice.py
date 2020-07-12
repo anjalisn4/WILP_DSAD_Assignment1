@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Dec 10 16:06:31 2019
+Created on Sat July 11 2020
 @author: DSAD Group 37
 @contribution:
     Team Member     Roll Number
@@ -9,77 +9,97 @@ Created on Tue Dec 10 16:06:31 2019
     Pranesh P	2019HC04175
     Anjali Sunder Naik	2019HC04178
 """
-"""
-w: Number of box offices --> 3
-n : max length of each queue --> 5
-"""
-class BoxOffice:
-    # Initializion function
+class MovieBoxOffice:
     def __init__(self, w, n):
         self.n = n
         self.w = w
         self.queues = [[None for i in range(n)] for j in range(w)]
-        self.starts = [0 for i in range(w)]
-        self.ends = [0 for i in range(w)]
-        self.open= [False for i in range(w)]
+        self.starts = [-1 for i in range(w)]
+        self.ends = [-1 for i in range(w)]
+        self.open = [False for i in range(w)]
         self.open[0] = True
+        self.currlen =[0 for i in range(w)]
 
-    # This function returns if a window is open by its id
-    def isOpen(self,windowid):
-        return self.open[windowid]
+    # returns True if the box office window is open and False if it is yet to be opened (closed).
+    def isOpen(self, windowid):
+        return self.open[windowid]  
 
-    #This function gets a window by its id
+    # returns the queue (number of people waiting) in front of the window.
     def getWindow(self, windowid):
+        window =[]
         if self.isOpen(windowid):
-            return [x for x in self.queues[windowid] if x is not None] 
-        else:
-            return []
+            index= self.starts[windowid]
+            for i in range(self.currlen[windowid]):
+                window.append(self.queues[windowid][index])
+                index= (index+1)%self.n        
+        return [x for x in window if x is not None]        
 
-    # This function issues a single ticket across all open windows where atleast one person is present
-    def giveTicket(self):
-        ticketgiven=0
-        for j in range(len(self.open)): 
-            if(self.open[j]):
-                queueWithNoNone = [x for x in self.queues[j] if x is not None]
-                if (len(queueWithNoNone)!=0):
-                    self.queues[j].remove(queueWithNoNone[0])
-                    self.queues[j].append(None)
-                    ticketgiven+=1   
-        return ticketgiven
+    def size(self, index):
+        return self.currlen[index]
 
-    # This is a recurring function which adds a person to the given queue index
-    def recurr(self,index,personid):
-        self.queues[index].pop(0)
-        self.queues[index].append(personid)
-        return index
+    # returns index of smallest open queue 
+    def getSmallestQueueIndex(self):
+        qsizes = []
+        for j in range(w):
+            if self.isOpen(j):
+                qsizes.append(self.size(j))
+        return qsizes.index(min(qsizes))  
 
-    # This function gives the smallest Queue available in the given list 
-    def smallestOpenQueue (self):
-        count = sum(1 for i in self.queues[0] if i != None)
-        smallestQueueIndex=0 
-        for j in range(len(self.open)): 
-            if (sum(1 for i in self.queues[j] if i != None) < count and self.open[j]):  
-                count = sum(1 for i in self.queues[j] if i != None)
-                smallestQueueIndex = j
-        return smallestQueueIndex  
+    # This is a recurring function which adds a person to the queue
+    def recurr(self, size, index, personid):
+        if (size == (self.n)):
+            if(index != (self.w-1)):
+                new_index = index+1
+                self.open[new_index] = True
+                size_new = self.size(new_index)
+                return self.recurr(size_new,new_index,personid)
+            else:
+                return -1    
+        else:        
+            self.enQueue(personid,index)
+            return index  
 
-    # This function adds a person to the smallest queue available.
+    # Insert an element into the circular queue
+    def enQueue(self, personid,index):
+        tail = (self.ends[index] + 1) % self.n
+        self.queues[index][tail] = personid
+        self.ends[index] = tail
+        self.currlen[index] += 1
+        if self.currlen[index] == 1:
+            self.starts[index] = 0
+
+    # Delete an element from the circular queue
+    def deQueue(self,index):
+        self.queues[index][self.starts[index]]=None
+        self.starts[index] = (self.starts[index] + 1) % self.n
+        self.currlen[index] -= 1
+        if (self.currlen[index] == 0):
+            self.starts[index] = -1
+            self.ends[index] = -1
+
+    # Add a person to the smallest open queue
     def addPerson(self, personid):
-        small = self.smallestOpenQueue()
-        if (sum(1 for i in self.queues[small] if i != None)!=n):
-            return self.recurr(small,personid)
+        get_smallest_queue_index = self.getSmallestQueueIndex()
+        smallest_queue = self.queues[get_smallest_queue_index]
+        size_of_smalles_queue = self.size(get_smallest_queue_index)
+        if (size_of_smalles_queue == (self.n)):
+            return self.recurr(size_of_smalles_queue,get_smallest_queue_index,personid)
         else:
-            try:
-                index_pos = self.open.index(False)
-                self.open[index_pos] = True
-                return self.recurr(index_pos,personid) 
-            except ValueError:
-                print("all queues are full")
-                return -1             
+            self.enQueue(personid,get_smallest_queue_index)
+            return get_smallest_queue_index   
+
+    # This function is called to issue a ticket at every open box office window with a queue of at least one person
+    def giveTicket(self):
+        ticketgiven = 0
+        for j in range(w):
+            if(self.open[j] and self.currlen[j]!=0):
+                self.deQueue(j)
+                ticketgiven += 1
+        return ticketgiven        
 
 if __name__ == '__main__':
     boxoffice = None
-    inputs = open('inputPS1.txt','r')
+    inputs = open('inputPS1.txt', 'r')
     output = open('outputPS1.txt', 'w')
     STRING_CONCAT = "%s >> %s\n"
     for i in inputs:
@@ -87,22 +107,24 @@ if __name__ == '__main__':
             itype, w, n = i.split(':')
             w = int(w)
             n = int(n)
-            boxoffice = BoxOffice(w,n)
+            boxoffice = MovieBoxOffice(w, n)
         if 'isOpen' in i:
-            itype , id = i.split(':')
-            isBoxOfficeOpen = boxoffice.isOpen(int(id))
+            itype, id = i.split(':')
+            isBoxOfficeOpen = boxoffice.isOpen(int(id)-1)
             output.write(STRING_CONCAT % (i, isBoxOfficeOpen))
         if 'getWindow' in i:
-            itype , id = i.split(':')
-            waiting_list = boxoffice.getWindow(int(id))
+            itype, id = i.split(':')
+            waiting_list = boxoffice.getWindow(int(id)-1)
             output.write(STRING_CONCAT % (i, waiting_list))
         if 'addPerson' in i:
-            itype , id = i.split(':')
+            ADD_PERSON_STRING_CONCAT="%s >> w%s\n"
+            itype, id = i.split(':')
             addperson = boxoffice.addPerson(int(id))
-            if(addperson == -1):
-                output.write("all queues are full\n")
-            else:    
-                output.write(STRING_CONCAT % (i, addperson))
+            if(addperson ==-1):
+                output.write(STRING_CONCAT % (i, "all queues are full"))   
+            else:
+                addperson_q = addperson + 1                 
+                output.write(ADD_PERSON_STRING_CONCAT % (i, addperson_q))            
         if 'giveTicket' in i:
             tickets = boxoffice.giveTicket()
             output.write(STRING_CONCAT % (i, tickets))
